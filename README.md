@@ -1,4 +1,5 @@
 # start
+
 npm install
 
 npm run dev
@@ -8,7 +9,6 @@ npm run dev
 npx prisma migrate dev --name <name>
 
 npx prisma studio
-
 
 # .env file
 

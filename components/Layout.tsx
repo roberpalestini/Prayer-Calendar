@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
-import Header from "./Header";
+import React, { ReactNode } from 'react';
+import Header from './Header';
 import Head from 'next/head';
 import { Container } from 'react-bulma-components';
 
@@ -13,9 +13,7 @@ const Layout: React.FC<Props> = (props) => (
       <title>Prayer Calendar</title>
     </Head>
     <Header />
-    <Container>
-      {props.children}
-    </Container>
+    <Container>{props.children}</Container>
   </>
 );
 

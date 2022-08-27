@@ -4,18 +4,16 @@ import { useState } from 'react';
 import { prisma } from '../../lib/prisma';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useSession, getSession, signIn } from 'next-auth/react';
-
 import Layout from '../../components/Layout';
-import { Form, Button, Heading } from 'react-bulma-components';
+import { Person } from '.prisma/client';
+import { Form, Button, Heading, Box } from 'react-bulma-components';
+
 interface FormData {
   name: string;
-  website: string;
+  note: string;
   email: string;
-  emailTwo: string;
-  phone: string;
+  homePhone: string;
   cellPhone: string;
-  details: string;
   country: string;
   state: string;
   city: string;
@@ -26,55 +24,30 @@ interface FormData {
 }
 
 // Array interface
-interface Ministries {
-  ministries: {
-    id: string;
-    name: string;
-    website: string;
-    email: string;
-    emailTwo: string;
-    phone: string;
-    cellPhone: string;
-    details: string;
-    country: string;
-    state: string;
-    city: string;
-    addressOne: string;
-    addressTwo: string;
-    schedule: string;
-  }[];
+interface People {
+  people: Person;
 }
 
-// Load ministries from getServerSideProps server side rendering
-const Home: NextPage<Ministries> = ({ ministries }) => {
+// Load people from getServerSideProps server side rendering
+const Home: NextPage<People> = ({ people }) => {
   const blank = {
     name: '',
-    website: '',
     email: '',
-    emailTwo: '',
-    phone: '',
+    note: '',
+    homePhone: '',
     cellPhone: '',
-    details: '',
     country: '',
     state: '',
     city: '',
+    zip: '',
     addressOne: '',
     addressTwo: '',
     schedule: '',
     id: '',
   };
   const [form, setForm] = useState<FormData>(blank);
-  const [newMinistry, setNewMinistry] = useState<Boolean>(true);
+  const [newPerson, setNewPerson] = useState<Boolean>(true);
   const router = useRouter();
-
-  const { data: session, status } = useSession();
-  if (status === 'loading') {
-    return <></>;
-  }
-
-  if (status === 'unauthenticated') {
-    return signIn();
-  }
 
   const refreshData = () => {
     router.replace(router.asPath);
@@ -82,14 +55,14 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
 
   async function handleSubmit(data: FormData) {
     // console.log(data)
-    // console.log(newMinistry)
+    // console.log(newPerson)
 
     try {
-      if (newMinistry) {
+      if (newPerson) {
         // Check input is not blank
         if (data.name) {
           // CREATE
-          fetch('api/ministry/create', {
+          fetch('api/person/create', {
             body: JSON.stringify(data),
             headers: {
               'Content-Type': 'application/json',
@@ -104,7 +77,7 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
         }
       } else {
         // UPDATE
-        fetch(`api/ministry/${data.id}`, {
+        fetch(`api/person/${data.id}`, {
           body: JSON.stringify(data),
           headers: {
             'Content-Type': 'application/json',
@@ -112,7 +85,7 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
           method: 'PUT',
         }).then(() => {
           setForm(blank);
-          setNewMinistry(true);
+          setNewPerson(true);
           refreshData();
         });
       }
@@ -121,13 +94,11 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
     }
   }
 
-  async function updateMinistry(
+  async function updatePerson(
     name,
-    website,
+    note,
     email,
-    emailTwo,
-    details,
-    phone,
+    homePhone,
     cellPhone,
     country,
     state,
@@ -136,14 +107,11 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
     addressTwo,
     id,
   ) {
-    //console.log(name, country, id)
     setForm({
       name,
-      website,
+      note,
       email,
-      emailTwo,
-      details,
-      phone,
+      homePhone,
       cellPhone,
       country,
       state,
@@ -152,12 +120,12 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
       addressTwo,
       id,
     });
-    setNewMinistry(false);
+    setNewPerson(false);
   }
 
-  async function deleteMinistry(id: string) {
+  async function deletePerson(id: string) {
     try {
-      fetch(`api/ministry/${id}`, {
+      fetch(`api/person/${id}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -172,15 +140,15 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
 
   function handleCancel() {
     setForm(blank);
-    setNewMinistry(true);
+    setNewPerson(true);
   }
 
   return (
     <Layout>
       <Head>
-        <title>Ministries</title>
+        <title>Contacts</title>
       </Head>
-      <Heading size="1">Ministries</Heading>
+      <Heading size="1">Contacts</Heading>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -191,22 +159,22 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
           <Form.Label>Name</Form.Label>
           <Form.Input
             type="text"
-            placeholder="Help Center"
+            placeholder="Mr Smith"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
         </Form.Field>
         <Form.Field>
-          <Form.Label>Details</Form.Label>
+          <Form.Label>Notes</Form.Label>
           <Form.Textarea
             type="text"
             placeholder=""
-            value={form.details}
-            onChange={(e) => setForm({ ...form, details: e.target.value })}
+            value={form.note}
+            onChange={(e) => setForm({ ...form, note: e.target.value })}
           />
         </Form.Field>
         <Form.Field>
-          <Form.Label>Email</Form.Label>
+          <Form.Label>Eamil</Form.Label>
           <Form.Input
             type="text"
             placeholder="e@e.e"
@@ -215,21 +183,12 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
           />
         </Form.Field>
         <Form.Field>
-          <Form.Label>Secondary Email</Form.Label>
-          <Form.Input
-            type="text"
-            placeholder="e@e.e"
-            value={form.emailTwo}
-            onChange={(e) => setForm({ ...form, emailTwo: e.target.value })}
-          />
-        </Form.Field>
-        <Form.Field>
-          <Form.Label>Phone</Form.Label>
+          <Form.Label>Home Phone</Form.Label>
           <Form.Input
             type="text"
             placeholder="(000) 000-0000"
-            value={form.phone}
-            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            value={form.homePhone}
+            onChange={(e) => setForm({ ...form, homePhone: e.target.value })}
           />
         </Form.Field>
         <Form.Field>
@@ -289,7 +248,7 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
 
         <Form.Field kind="group">
           <Form.Control>
-            {newMinistry ? (
+            {newPerson ? (
               <Button color="link" type="submit">
                 Add +
               </Button>
@@ -312,51 +271,85 @@ const Home: NextPage<Ministries> = ({ ministries }) => {
       </form>
 
       <div className="w-auto min-w-[25%] max-w-min mt-10 mx-auto space-y-6 flex flex-col items-stretch">
-        <h2 className="text-center font-bold text-xl mt-4">Saved Ministries</h2>
+        <h2 className="text-center font-bold text-xl mt-4">Saved Contacts</h2>
         <ul>
-          {ministries.map((ministry) => (
-            <li key={ministry.id} className="border-b border-gray-600 p-2">
-              <div className="flex jusify-between">
-                <div className="flex-1">
-                  <h3 className="font-bold">{ministry.name}</h3>
-                  <p className="text-sm">{ministry.website}</p>
-                  <p className="text-sm">{ministry.details}</p>
-                  <p className="text-sm">{ministry.email}</p>
-                  <p className="text-sm">{ministry.emailTwo}</p>
-                  <p className="text-sm">{ministry.phone}</p>
-                  <p className="text-sm">{ministry.cellPhone}</p>
-                  <p className="text-sm">{ministry.country}</p>
-                  <p className="text-sm">{ministry.state}</p>
-                  <p className="text-sm">{ministry.city}</p>
-                  <p className="text-sm">{ministry.addressOne}</p>
-                  <p className="text-sm">{ministry.addressTwo}</p>
+          {people.map((person) => (
+            <Box key={person.id}>
+              <li className="border-b border-gray-600 p-2">
+                <div className="flex jusify-between">
+                  <div className="flex-1">
+                    <h3 className="font-bold">
+                      <strong>Name: </strong>
+                      {person.name}
+                    </h3>
+                    <p className="text-sm">
+                      <strong>Note: </strong>
+                      {person.note}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Email: </strong>
+                      {person.email}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Home Phone: </strong>
+                      {person.homePhone}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Cell Phone: </strong>
+                      {person.cellPhone}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Country: </strong>
+                      {person.country}
+                    </p>
+                    <p className="text-sm">
+                      <strong>State: </strong>
+                      {person.state}
+                    </p>
+                    <p className="text-sm">
+                      <strong>City: </strong>
+                      {person.city}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Address One: </strong>
+                      {person.addressOne}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Address Two: </strong>
+                      {person.addressTwo}
+                    </p>
+                  </div>
+                  <div style={{ float: 'right', marginTop: '-30px' }}>
+                    <Button
+                      color="link"
+                      onClick={() =>
+                        updatePerson(
+                          person.name,
+                          person.note,
+                          person.email,
+                          person.homePhone,
+                          person.cellPhone,
+                          person.country,
+                          person.state,
+                          person.city,
+                          person.addressOne,
+                          person.addressTwo,
+                          person.id,
+                        )
+                      }
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      color="error"
+                      onClick={() => deletePerson(person.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </div>
-                <button
-                  onClick={() =>
-                    updateMinistry(
-                      ministry.name,
-                      ministry.website,
-                      ministry.email,
-                      ministry.emailTwo,
-                      ministry.details,
-                      ministry.phone,
-                      ministry.cellPhone,
-                      ministry.country,
-                      ministry.state,
-                      ministry.city,
-                      ministry.addressOne,
-                      ministry.addressTwo,
-                      ministry.id,
-                    )
-                  }
-                >
-                  Edit
-                </button>
-                <button onClick={() => deleteMinistry(ministry.id)}>
-                  Delete
-                </button>
-              </div>
-            </li>
+              </li>
+            </Box>
           ))}
         </ul>
       </div>
@@ -368,17 +361,15 @@ export default Home;
 
 // Server side rendering on every request
 export const getServerSideProps: GetServerSideProps = async () => {
-  // READ all ministries from DB
-  const ministries = await prisma?.ministry.findMany({
+  // READ all people from DB
+  const people = await prisma?.person.findMany({
     select: {
       id: true,
       name: true,
-      website: true,
       email: true,
-      emailTwo: true,
-      phone: true,
+      note: true,
+      homePhone: true,
       cellPhone: true,
-      details: true,
       country: true,
       state: true,
       city: true,
@@ -389,7 +380,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   return {
     props: {
-      ministries,
+      people,
     },
   };
 };
