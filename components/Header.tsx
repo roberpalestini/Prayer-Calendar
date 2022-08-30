@@ -10,7 +10,7 @@ const Header: React.FC = () => {
     router.pathname === pathname;
 
   /* eslint-disable react/display-name */
-  const NavbarItem = React.forwardRef((props, ref) => (
+  const NavbarItem = React.forwardRef<'Link', any>((props, ref) => (
     <Navbar.Item {...props} domRef={ref} />
   ));
 
