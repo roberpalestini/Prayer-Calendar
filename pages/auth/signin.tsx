@@ -35,14 +35,7 @@ export default function SignIn({ providers }: { providers: any[] }) {
                     key={provider?.name}
                     className="is-flex is-justify-content-center"
                   >
-                    <Button
-                      onClick={() =>
-                        signIn(provider.id, {
-                          redirect: true,
-                          callbackUrl: router.query.callbackUrl.toString(),
-                        })
-                      }
-                    >
+                    <Button onClick={() => signIn(provider.id)}>
                       Sign in with {provider.name}
                     </Button>
                   </div>

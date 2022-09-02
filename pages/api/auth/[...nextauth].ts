@@ -39,6 +39,10 @@ export const authOptions: NextAuthOptions = {
         return false;
       }
     },
+    async redirect({ url, baseUrl }) {
+      console.log(url, baseUrl);
+      return baseUrl; //Promise.resolve(url)
+    },
     // callbacks: {
     //   async jwt({ token }) {
     //     token.userRole = 'admin';
