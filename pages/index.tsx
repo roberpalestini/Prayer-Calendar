@@ -14,11 +14,12 @@ import {
   Level,
   Button,
 } from 'react-bulma-components';
-import FullCalendar from '@fullcalendar/react'
+import FullCalendar, { formatDate }  from '@fullcalendar/react'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { Calendar } from '@fullcalendar/core';
+import { INITIAL_EVENTS, createEventId } from '../utils/event-utils'
 
 interface FormData {
   name: string;
@@ -41,6 +42,7 @@ export default function Home({ assemblies }) {
   const [newAssembly, setNewAssembly] = useState<Boolean>(true);
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [currentEvents, setCurrentEvents] = useState<any>()
   if (status === 'loading') {
     return
   }
@@ -136,6 +138,44 @@ export default function Home({ assemblies }) {
   }
 
 
+  
+  const handleWeekendsToggle = () => {
+    this.setState({
+      weekendsVisible: !this.state.weekendsVisible
+    })
+  }
+
+  const handleDateSelect = (selectInfo) => {
+    let title = prompt('Please enter a new title for your event')
+    let calendarApi = selectInfo.view.calendar
+
+    calendarApi.unselect() // clear date selection
+
+    if (title) {
+      calendarApi.addEvent({
+        id: createEventId(),
+        title,
+        start: selectInfo.startStr,
+        end: selectInfo.endStr,
+        allDay: selectInfo.allDay
+      })
+    }
+  }
+
+  const handleEventClick = (clickInfo) => {
+    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+      clickInfo.event.remove()
+    }
+  }
+
+  const handleEvents = (events) => {
+    setCurrentEvents({
+      currentEvents: events
+    })
+  }
+
+
+
   return (
     <Layout>
       <Head>
@@ -159,17 +199,13 @@ export default function Home({ assemblies }) {
   initialView='dayGridMonth'
     nowIndicator={true}
     editable={true}
-    initialEvents={[
-      { title: 'nice event', start: new Date(), resourceId: 'a' },
-      {
-        id: 'a',
-        title: 'my event',
-        start: '2022-09-01'
-      }
-    ]}
-    events={[
-      
-    ]}
+    selectable={true}
+    select={handleDateSelect}
+    eventContent={renderEventContent} // custom render function
+    eventClick={handleEventClick}
+    eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+    initialEvents={INITIAL_EVENTS}
+
     initialResources={[
       { id: 'a', title: 'Auditorium A' },
       { id: 'b', title: 'Auditorium B' },
@@ -293,6 +329,24 @@ export default function Home({ assemblies }) {
 */}
     </Layout>
   );
+}
+
+function renderEventContent(eventInfo) {
+  return (
+    <>
+      <b>{eventInfo.timeText}</b>
+      <i>{eventInfo.event.title}</i>
+    </>
+  )
+}
+
+function renderSidebarEvent(event) {
+  return (
+    <li key={event.id}>
+      <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+      <i>{event.title}</i>
+    </li>
+  )
 }
 
 // export default Home;

@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { Navbar, Container } from 'react-bulma-components';
+import logo from '../public/logo.png'
+import Image from 'next/image';
+
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -78,10 +81,18 @@ const Header: React.FC = () => {
   }
 
   return (
-    <Navbar transparent={true}>
+    <Navbar transparent={true} style={{marginTop:'10px'}}>
       <Container>
         <Navbar.Brand>
-          <Navbar.Item href="#">Home</Navbar.Item>
+          <Navbar.Item href="#">
+          <Image
+          
+        alt="Bulma: a modern CSS framework based on Flexbox"
+layout='fixed' width='100' height='87'
+        
+        src={logo}
+      />
+          </Navbar.Item>
           <Navbar.Burger />
         </Navbar.Brand>
         <Navbar.Menu>{menu}</Navbar.Menu>

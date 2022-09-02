@@ -21,5 +21,8 @@ module.exports = withTM({
   experimental: {
     forceSwcTransforms: true,
   },
+  images: {
+    disableStaticImages: true,
+  },
   nextConfig,
 })
