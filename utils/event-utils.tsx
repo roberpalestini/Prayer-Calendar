@@ -5,7 +5,9 @@ export const INITIAL_EVENTS = [
   {
     id: createEventId(),
     title: 'All-day event',
-    start: todayStr
+    start: todayStr,
+    display: 'background'
+
   },
   {
     id: createEventId(),

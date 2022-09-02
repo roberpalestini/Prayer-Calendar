@@ -194,38 +194,22 @@ export default function Home({ assemblies }) {
 
       <hr></hr>
       <div className='demo-app'>
-        {renderSidebar(currentEvents)}
-
-        <div className='demo-app-main'>
-          <FullCalendar
-            plugins={[interactionPlugin, resourceTimelinePlugin, dayGridPlugin]}
-            initialView='dayGridMonth'
-            nowIndicator={true}
-            editable={true}
-            selectable={true}
-            select={handleDateSelect}
-            eventContent={renderEventContent} // custom render function
-            eventClick={handleEventClick}
-            eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-            initialEvents={INITIAL_EVENTS}
-
-            initialResources={[
-              { id: 'a', title: 'Auditorium A' },
-              { id: 'b', title: 'Auditorium B' },
-              { id: 'c', title: 'Auditorium C' }
-            ]}
-            dateClick={function (info) {
-              alert('Clicked on: ' + info.dateStr);
-              alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-              alert('Current view: ' + info.view.type);
-              // change the day's background color just for fun
-              info.dayEl.style.backgroundColor = 'red';
-            }}
-          />
-        </div>
+      <div className='demo-app-sidebar'>
+      <div className='demo-app-sidebar-section'>
+        <h2>Instructions</h2>
+        <ul>
+          <li>Select dates and you will be prompted to create a new event</li>
+          <li>Drag, drop, and resize events</li>
+          <li>Click an event to delete it</li>
+        </ul>
       </div>
-      <hr></hr>
-      <Heading>Saved Assemblies</Heading>
+      <div className='demo-app-sidebar-section'>
+
+      </div>
+      <div className='demo-app-sidebar-section'>
+        <h2>All Events</h2>
+        <ul>
+        <Heading>Saved Assemblies</Heading>
       <Heading subtitle>App</Heading>
       <ul>
         {assemblies.map((assembly) => (
@@ -331,6 +315,42 @@ export default function Home({ assemblies }) {
           )}
       </form>
 */}
+        </ul>
+      </div>
+    </div>
+
+        <div className='demo-app-main'>
+          <FullCalendar
+            plugins={[interactionPlugin, resourceTimelinePlugin, dayGridPlugin]}
+            initialView='dayGridMonth'
+            
+            nowIndicator={true}
+            editable={true}
+            selectable={true}
+            select={handleDateSelect}
+            eventContent={renderEventContent} // custom render function
+            eventClick={handleEventClick}
+            eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+            initialEvents={INITIAL_EVENTS}
+            
+            
+            initialResources={[
+              { id: 'a', title: 'Auditorium A' },
+              { id: 'b', title: 'Auditorium B' },
+              { id: 'c', title: 'Auditorium C' }
+            ]}
+            dateClick={function (info) {
+              alert('Clicked on: ' + info.dateStr);
+              alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+              alert('Current view: ' + info.view.type);
+              // change the day's background color just for fun
+              info.dayEl.style.backgroundColor = 'red';
+            }}
+          />
+        </div>
+      </div>
+      <hr></hr>
+    
     </Layout>
   );
 }
@@ -353,29 +373,7 @@ function renderSidebarEvent(event) {
   )
 }
 
-function renderSidebar(events?: any) {
-  return (
-    <div className='demo-app-sidebar'>
-      <div className='demo-app-sidebar-section'>
-        <h2>Instructions</h2>
-        <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
-        </ul>
-      </div>
-      <div className='demo-app-sidebar-section'>
 
-      </div>
-      <div className='demo-app-sidebar-section'>
-        <h2>All Events</h2>
-        <ul>
-          {renderSidebarEvent(INITIAL_EVENTS)}
-        </ul>
-      </div>
-    </div>
-  )
-}
 
 // export default Home;
 
