@@ -14,7 +14,7 @@ import {
   Level,
   Button,
 } from 'react-bulma-components';
-import FullCalendar, { formatDate }  from '@fullcalendar/react'
+import FullCalendar, { formatDate } from '@fullcalendar/react'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -42,7 +42,7 @@ export default function Home({ assemblies }) {
   const [newAssembly, setNewAssembly] = useState<Boolean>(true);
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [currentEvents, setCurrentEvents] = useState<any>()
+  const [currentEvents, setCurrentEvents] = useState<any>([])
   if (status === 'loading') {
     return
   }
@@ -138,7 +138,7 @@ export default function Home({ assemblies }) {
   }
 
 
-  
+
   const handleWeekendsToggle = () => {
     this.setState({
       weekendsVisible: !this.state.weekendsVisible
@@ -193,33 +193,37 @@ export default function Home({ assemblies }) {
       </Box>
 
       <hr></hr>
+      <div className='demo-app'>
+        {renderSidebar(currentEvents)}
 
-      <FullCalendar
-    plugins={[interactionPlugin, resourceTimelinePlugin, dayGridPlugin]}
-  initialView='dayGridMonth'
-    nowIndicator={true}
-    editable={true}
-    selectable={true}
-    select={handleDateSelect}
-    eventContent={renderEventContent} // custom render function
-    eventClick={handleEventClick}
-    eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-    initialEvents={INITIAL_EVENTS}
+        <div className='demo-app-main'>
+          <FullCalendar
+            plugins={[interactionPlugin, resourceTimelinePlugin, dayGridPlugin]}
+            initialView='dayGridMonth'
+            nowIndicator={true}
+            editable={true}
+            selectable={true}
+            select={handleDateSelect}
+            eventContent={renderEventContent} // custom render function
+            eventClick={handleEventClick}
+            eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+            initialEvents={INITIAL_EVENTS}
 
-    initialResources={[
-      { id: 'a', title: 'Auditorium A' },
-      { id: 'b', title: 'Auditorium B' },
-      { id: 'c', title: 'Auditorium C' }
-    ]}
-    dateClick = {function(info) {
-      alert('Clicked on: ' + info.dateStr);
-      alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-      alert('Current view: ' + info.view.type);
-      // change the day's background color just for fun
-      info.dayEl.style.backgroundColor = 'red';
-    }}
-  />
-
+            initialResources={[
+              { id: 'a', title: 'Auditorium A' },
+              { id: 'b', title: 'Auditorium B' },
+              { id: 'c', title: 'Auditorium C' }
+            ]}
+            dateClick={function (info) {
+              alert('Clicked on: ' + info.dateStr);
+              alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+              alert('Current view: ' + info.view.type);
+              // change the day's background color just for fun
+              info.dayEl.style.backgroundColor = 'red';
+            }}
+          />
+        </div>
+      </div>
       <hr></hr>
       <Heading>Saved Assemblies</Heading>
       <Heading subtitle>App</Heading>
@@ -343,9 +347,33 @@ function renderEventContent(eventInfo) {
 function renderSidebarEvent(event) {
   return (
     <li key={event.id}>
-      <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+      <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
       <i>{event.title}</i>
     </li>
+  )
+}
+
+function renderSidebar(events?: any) {
+  return (
+    <div className='demo-app-sidebar'>
+      <div className='demo-app-sidebar-section'>
+        <h2>Instructions</h2>
+        <ul>
+          <li>Select dates and you will be prompted to create a new event</li>
+          <li>Drag, drop, and resize events</li>
+          <li>Click an event to delete it</li>
+        </ul>
+      </div>
+      <div className='demo-app-sidebar-section'>
+
+      </div>
+      <div className='demo-app-sidebar-section'>
+        <h2>All Events</h2>
+        <ul>
+          {renderSidebarEvent(INITIAL_EVENTS)}
+        </ul>
+      </div>
+    </div>
   )
 }
 
