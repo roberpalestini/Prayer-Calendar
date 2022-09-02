@@ -14,6 +14,12 @@ import {
   Level,
   Button,
 } from 'react-bulma-components';
+import FullCalendar from '@fullcalendar/react'
+import interactionPlugin from '@fullcalendar/interaction'
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
+import dayGridPlugin from '@fullcalendar/daygrid';
+import { Calendar } from '@fullcalendar/core';
+
 interface FormData {
   name: string;
   country: string;
@@ -36,7 +42,7 @@ export default function Home({ assemblies }) {
   const router = useRouter();
   const { data: session, status } = useSession();
   if (status === 'loading') {
-    return <></>;
+    return
   }
 
   if (status === 'unauthenticated') {
@@ -129,6 +135,7 @@ export default function Home({ assemblies }) {
     setNewAssembly(true);
   }
 
+
   return (
     <Layout>
       <Head>
@@ -147,6 +154,37 @@ export default function Home({ assemblies }) {
 
       <hr></hr>
 
+      <FullCalendar
+    plugins={[interactionPlugin, resourceTimelinePlugin, dayGridPlugin]}
+  initialView='dayGridMonth'
+    nowIndicator={true}
+    editable={true}
+    initialEvents={[
+      { title: 'nice event', start: new Date(), resourceId: 'a' },
+      {
+        id: 'a',
+        title: 'my event',
+        start: '2022-09-01'
+      }
+    ]}
+    events={[
+      
+    ]}
+    initialResources={[
+      { id: 'a', title: 'Auditorium A' },
+      { id: 'b', title: 'Auditorium B' },
+      { id: 'c', title: 'Auditorium C' }
+    ]}
+    dateClick = {function(info) {
+      alert('Clicked on: ' + info.dateStr);
+      alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+      alert('Current view: ' + info.view.type);
+      // change the day's background color just for fun
+      info.dayEl.style.backgroundColor = 'red';
+    }}
+  />
+
+      <hr></hr>
       <Heading>Saved Assemblies</Heading>
       <Heading subtitle>App</Heading>
       <ul>

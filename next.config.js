@@ -4,4 +4,22 @@ const nextConfig = {
   swcMinify: true,
 };
 
-module.exports = nextConfig;
+
+// for transpiling all ESM @fullcalendar/* packages
+// also, for piping fullcalendar thru babel (to learn why, see babel.config.js)
+const withTM = require('next-transpile-modules')([
+  '@fullcalendar/common',
+  '@fullcalendar/interaction',
+  '@fullcalendar/resource-timeline',
+  '@fullcalendar/timeline',
+  '@fullcalendar/daygrid',
+  '@fullcalendar/core',
+])
+
+
+module.exports = withTM({
+  experimental: {
+    forceSwcTransforms: true,
+  },
+  nextConfig,
+})

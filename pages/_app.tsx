@@ -1,6 +1,10 @@
 import { SessionProvider } from 'next-auth/react';
 import '../styles/globals.scss';
+import '@fullcalendar/common/main.css';
+import '@fullcalendar/timeline/main.css';
+import '@fullcalendar/resource-timeline/main.css';
 import type { AppProps } from 'next/app';
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

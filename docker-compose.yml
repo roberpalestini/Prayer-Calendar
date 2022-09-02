@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:14.5
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: nestjs
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    networks:
+      - sai
+    restart: always
+
+  test:
+  
+    container_name: test
+    image: test
+    build:
+      context: .
+      target: development
+      dockerfile: Dockerfile
+    command: npm run start:prod
+    ports:
+      - 3000:3000
+    networks:
+      - sai
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    links:
+      - db
+    depends_on:
+      - db
+    restart: always
+
+networks:
+  sai:
+    driver: bridge
+
+volumes:
+  database-data:
