@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+
 import { useRouter } from 'next/router';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { Navbar, Container } from 'react-bulma-components';
@@ -27,23 +28,17 @@ const Header: React.FC = () => {
     menu = (
       <>
         <Navbar.Container>
-          <Navbar.Item href="/" active={isActive('/')} arrowless="true">
+          <Navbar.Item href="/" active={isActive('/')}>
             Home
           </Navbar.Item>
           <Link href="/assembly">
-            <NavbarItem active={isActive('/assembly')} arrowless="true">
-              Assemblies
-            </NavbarItem>
+            <NavbarItem active={isActive('/assembly')}>Assemblies</NavbarItem>
           </Link>
           <Link href="/person">
-            <NavbarItem active={isActive('/person')} arrowless="true">
-              Contacts
-            </NavbarItem>
+            <NavbarItem active={isActive('/person')}>Contacts</NavbarItem>
           </Link>
           <Link href="/ministry">
-            <NavbarItem active={isActive('/ministry')} arrowless="true">
-              Ministries
-            </NavbarItem>
+            <NavbarItem active={isActive('/ministry')}>Ministries</NavbarItem>
           </Link>
         </Navbar.Container>
         <Navbar.Container align="right">
@@ -58,29 +53,23 @@ const Header: React.FC = () => {
       <>
         <Navbar.Container>
           <Link href="/">
-            <NavbarItem href="/" active={isActive('/')} arrowless="true">
+            <NavbarItem href="/" active={isActive('/')}>
               Home
             </NavbarItem>
           </Link>
           <Link href="/assembly">
-            <NavbarItem active={isActive('/assembly')} arrowless="true">
-              Assemblies
-            </NavbarItem>
+            <NavbarItem active={isActive('/assembly')}>Assemblies</NavbarItem>
           </Link>
           <Link href="/person">
-            <NavbarItem active={isActive('/person')} arrowless="true">
-              Contacts
-            </NavbarItem>
+            <NavbarItem active={isActive('/person')}>Contacts</NavbarItem>
           </Link>
           <Link href="/ministry">
-            <NavbarItem active={isActive('/ministry')} arrowless="true">
-              Ministries
-            </NavbarItem>
+            <NavbarItem active={isActive('/ministry')}>Ministries</NavbarItem>
           </Link>
         </Navbar.Container>
         <Navbar.Container align="right">
           <Navbar.Item>
-            {session.user.name} ({session.user.email})
+            {session?.user?.name} ({session?.user?.email})
           </Navbar.Item>
           <Navbar.Item onClick={() => signOut()}>Log Out</Navbar.Item>
         </Navbar.Container>
@@ -89,17 +78,10 @@ const Header: React.FC = () => {
   }
 
   return (
-    <Navbar transparent="true">
+    <Navbar transparent={true}>
       <Container>
         <Navbar.Brand>
-          <Navbar.Item href="#">
-            <img
-              alt="Bulma: a modern CSS framework based on Flexbox"
-              height="28"
-              src="https://bulma.io/images/bulma-logo.png"
-              width="112"
-            />
-          </Navbar.Item>
+          <Navbar.Item href="#">Home</Navbar.Item>
           <Navbar.Burger />
         </Navbar.Brand>
         <Navbar.Menu>{menu}</Navbar.Menu>

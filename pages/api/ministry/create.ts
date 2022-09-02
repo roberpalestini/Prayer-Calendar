@@ -3,12 +3,12 @@ import { prisma } from '../../../lib/prisma';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 type Data = {
-  name: string;
+  message: string;
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<Data | any>,
 ) {
   const session = await unstable_getServerSession(req, res, authOptions);
   if (!session) {

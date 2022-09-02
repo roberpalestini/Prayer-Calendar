@@ -9,7 +9,7 @@ import {
   Button,
 } from 'react-bulma-components';
 
-export default function SignIn({ providers }) {
+export default function SignIn({ providers }: { providers: any[] }) {
   const router = useRouter();
   const { error } = router.query;
 
@@ -17,14 +17,14 @@ export default function SignIn({ providers }) {
     <Hero size="fullheight">
       <Hero.Body>
         <Container>
-          <Columns centered="true">
+          <Columns centered={true}>
             <Columns.Column
-              tablet={{ size: '5' }}
-              desktop={{ size: '4' }}
-              widescreen={{ size: '3' }}
+              tablet={{ size: 5 }}
+              desktop={{ size: 4 }}
+              widescreen={{ size: 3 }}
             >
               <Box>
-                <Heading size="3" className="has-text-centered">
+                <Heading size={3} className="has-text-centered">
                   Prayer Calendar
                 </Heading>
                 {error && (
@@ -32,14 +32,14 @@ export default function SignIn({ providers }) {
                 )}
                 {Object.values(providers).map((provider) => (
                   <div
-                    key={provider.name}
+                    key={provider?.name}
                     className="is-flex is-justify-content-center"
                   >
                     <Button
                       onClick={() =>
                         signIn(provider.id, {
                           redirect: true,
-                          callbackUrl: router.query.callbackUrl,
+                          callbackUrl: router.query.callbackUrl.toString(),
                         })
                       }
                     >
@@ -56,7 +56,7 @@ export default function SignIn({ providers }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   const providers = await getProviders();
   return {
     props: { providers },

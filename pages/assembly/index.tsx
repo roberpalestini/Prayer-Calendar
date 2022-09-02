@@ -1,4 +1,3 @@
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useState, useEffect, forwardRef } from 'react';
 import { useSession, getSession, signIn } from 'next-auth/react';
@@ -20,7 +19,7 @@ interface Assemblies {
   assemblies: Assembly;
 }
 
-const Home: NextPage<Assemblies> = ({ assemblies }) => {
+export default function Home({ assemblies }) {
   const { data: session, status } = useSession();
   if (status === 'loading') {
     return <></>;
@@ -35,7 +34,7 @@ const Home: NextPage<Assemblies> = ({ assemblies }) => {
       <Head>
         <title>Assemblies</title>
       </Head>
-      <Heading size="1">Assemblies</Heading>
+      <Heading size={1}>Assemblies</Heading>
       <Link href="/assembly/new">
         <LinkButton color="link">New</LinkButton>
       </Link>
@@ -109,9 +108,9 @@ const Home: NextPage<Assemblies> = ({ assemblies }) => {
       </ul>
     </Layout>
   );
-};
+}
 
-export default Home;
+// export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const assemblies = await prisma?.assembly.findMany({

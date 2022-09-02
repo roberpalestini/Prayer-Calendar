@@ -12,8 +12,6 @@ import {
   Block,
   Image,
   Level,
-  LevelSide,
-  LevelItem,
   Button,
 } from 'react-bulma-components';
 interface FormData {
@@ -32,8 +30,8 @@ interface Assemblies {
 }
 
 // Load assemblies from getServerSideProps server side rendering
-const Home: NextPage<Assemblies> = ({ assemblies }) => {
-  const [form, setForm] = useState<FormData>({ name: '', content: '', id: '' });
+export default function Home({ assemblies }) {
+  const [form, setForm] = useState<FormData>({ name: '', country: '', id: '' });
   const [newAssembly, setNewAssembly] = useState<Boolean>(true);
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -96,7 +94,16 @@ const Home: NextPage<Assemblies> = ({ assemblies }) => {
     }
   }
 
-  async function updateAssembly(name, country, id) {
+  async function updateAssembly(
+    name,
+    country,
+    state,
+    city,
+    addressOne,
+    addressTwo,
+    schedule,
+    id,
+  ) {
     //console.log(name, country, id)
     setForm({ name, country, id });
     setNewAssembly(false);
@@ -248,9 +255,9 @@ const Home: NextPage<Assemblies> = ({ assemblies }) => {
 */}
     </Layout>
   );
-};
+}
 
-export default Home;
+// export default Home;
 
 // Server side rendering on every request
 export const getServerSideProps: GetServerSideProps = async () => {

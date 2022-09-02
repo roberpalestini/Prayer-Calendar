@@ -8,7 +8,7 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<Data | any>,
 ) {
   const session = await unstable_getServerSession(req, res, authOptions);
   if (!session) {

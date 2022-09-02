@@ -18,8 +18,8 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
       id: 'github',
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+      clientId: process.env.GITHUB_ID ?? '',
+      clientSecret: process.env.GITHUB_SECRET ?? '',
     }),
   ],
   adapter: PrismaAdapter(prisma),
@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      if (user.approved === 1) {
+      if (account.providerAccountId === '17788706') {
         return true;
       } else {
         // Return false to display a default error message
@@ -39,12 +39,12 @@ export const authOptions: NextAuthOptions = {
         return false;
       }
     },
-    callbacks: {
-      async jwt({ token }) {
-        token.userRole = 'admin';
-        return token;
-      },
-    },
+    // callbacks: {
+    //   async jwt({ token }) {
+    //     token.userRole = 'admin';
+    //     return token;
+    //   },
+    // },
   },
 };
 

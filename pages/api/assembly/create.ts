@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../../lib/prisma';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
+import { Assembly } from '.prisma/client';
 
 type Data = {
   name: string;
@@ -9,7 +10,7 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<Assembly | any>,
 ) {
   const session = await unstable_getServerSession(req, res, authOptions);
   if (!session) {

@@ -1,4 +1,3 @@
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useState, useEffect, forwardRef } from 'react';
 
@@ -25,7 +24,7 @@ import contactPeople from '../../api/person/contact';
 import main from '../../api/person/contact';
 import Link from 'next/link';
 
-const Home: NextPage<Assembly> = ({ assembly }) => {
+export default function Home({ assembly }) {
   const router = useRouter();
   const { assemblyId } = router.query;
   const [peopleSearch, setPeopleSearch] = useState<any[]>([]);
@@ -114,33 +113,33 @@ const Home: NextPage<Assembly> = ({ assembly }) => {
   //   setNewAssembly(true)
   // }
 
-  async function searchContacts(nameContact: string) {
-    try {
-      if (nameContact == '') {
-        return setPeopleSearch([]);
-      }
-      fetch('/api/person/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/text',
-        },
-        body: nameContact,
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setPeopleSearch([...res]);
-          setForm({
-            ...form,
-            contacts: res.map((e) => {
-              return e.id;
-            }),
-          });
-          console.log(form);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async function searchContacts(nameContact: string) {
+  //   try {
+  //     if (nameContact == '') {
+  //       return setPeopleSearch([]);
+  //     }
+  //     fetch('/api/person/contact', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/text',
+  //       },
+  //       body: nameContact,
+  //     })
+  //       .then((res) => res.json())
+  //       .then((res) => {
+  //         setPeopleSearch([...res]);
+  //         setForm({
+  //           ...form,
+  //           contacts: res.map((e) => {
+  //             return e.id;
+  //           }),
+  //         });
+  //         console.log(form);
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const title = `${assembly.name} | Assemblies`;
   return (
@@ -148,7 +147,7 @@ const Home: NextPage<Assembly> = ({ assembly }) => {
       <Head>
         <title>{title}</title>
       </Head>
-      <Heading size="1">{assembly.name}</Heading>
+      <Heading size={1}>{assembly.name}</Heading>
       <Columns>
         <Columns.Column>
           <Block>
@@ -182,7 +181,7 @@ const Home: NextPage<Assembly> = ({ assembly }) => {
               </p>
             );
           })}
-          <Heading size="2">Contacts</Heading>
+          <Heading size={2}>Contacts</Heading>
           {peopleSearch.map((person) => {
             return (
               <Box key={person.id}>
@@ -233,9 +232,9 @@ const Home: NextPage<Assembly> = ({ assembly }) => {
       </Columns>
     </Layout>
   );
-};
+}
 
-export default Home;
+// export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const assemblyId = context.query;

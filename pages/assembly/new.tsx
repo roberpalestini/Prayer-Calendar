@@ -1,4 +1,3 @@
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useSession, getSession, signIn } from 'next-auth/react';
@@ -8,7 +7,6 @@ import { prisma } from '../../lib/prisma';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
-import AccessDenied from '../../components/access-denied';
 import { Form, Button, Heading, Card, Box, Icon } from 'react-bulma-components';
 import styled from 'styled-components';
 import { Person, Assembly } from '.prisma/client';
@@ -31,7 +29,7 @@ interface Assemblies {
   assemblies: Assembly;
 }
 
-const Home: NextPage<Assemblies> = ({ assemblies }) => {
+export default function Home({ assemblies }) {
   const blank = {
     name: '',
     country: '',
@@ -84,7 +82,7 @@ const Home: NextPage<Assemblies> = ({ assemblies }) => {
       <Head>
         <title>{title}</title>
       </Head>
-      <Heading size="1">{title}</Heading>
+      <Heading size={1}>{title}</Heading>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -177,6 +175,6 @@ const Home: NextPage<Assemblies> = ({ assemblies }) => {
       </form>
     </Layout>
   );
-};
+}
 
-export default Home;
+// export default Home;

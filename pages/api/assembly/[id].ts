@@ -50,7 +50,7 @@ export default async function handler(
           addressOne,
           addressTwo,
           schedule,
-          contacts: { connect: contacts.map((conId) => ({ id: conId })) },
+          // contacts: { connect: contacts.map((conId) => ({ id: conId })) },
         },
       });
       res.status(200).json({ message: 'Note updated' });

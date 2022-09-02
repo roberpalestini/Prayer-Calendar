@@ -4,13 +4,13 @@ import { useState, useEffect, forwardRef } from 'react';
 import { useSession, getSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { prisma } from '../../../lib/prisma';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import Layout from '../../../components/Layout';
 import LinkButton from '../../../components/LinkButton';
-import AccessDenied from '../../../components/access-denied';
+
 import { Form, Button, Heading, Card, Box, Icon } from 'react-bulma-components';
-import styled from 'styled-components';
+
 import { Person, Assembly } from '.prisma/client';
 import contactPeople from '../../api/person/contact';
 import main from '../../api/person/contact';
@@ -28,7 +28,8 @@ interface FormData {
   contacts?: any;
 }
 
-const Home: NextPage<Assembly> = ({ assembly }) => {
+export default function Home({ assembly }) {
+  // const Home: NextPage<Assembly> = ({ assembly }) => {
   const blank = {
     name: '',
     country: '',
@@ -91,7 +92,7 @@ const Home: NextPage<Assembly> = ({ assembly }) => {
       <Head>
         <title>{title}</title>
       </Head>
-      <Heading size="1">{title}</Heading>
+      <Heading size={1}>{title}</Heading>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -193,9 +194,9 @@ const Home: NextPage<Assembly> = ({ assembly }) => {
       <br></br>
     </Layout>
   );
-};
+}
 
-export default Home;
+// export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const assemblyId = context.query;
