@@ -1,28 +1,20 @@
 let eventGuid = 0
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
-export const INITIAL_EVENTS = [
-  {
-    id: createEventId(),
-    title: 'All-day event',
-    start: todayStr,
-    display: 'background'
+export const INITIAL_EVENTS = (requestModel: any) => {
+  if (requestModel) {
 
-  },
-  {
-    id: createEventId(),
-    title: 'Timed event',
-    start: todayStr + 'T12:00:00'
-  },
-  
-    { title: 'nice event', start: new Date(), resourceId: 'a' },
-    {
-      id: 'a',
-      title: 'my event',
-      start: '2022-09-01'
+    for (let index = 0; index < 1; index++) {
+      const element = requestModel[index];
+        return {
+          id: element.id,
+          tittle: element.content,
+          start: element.publishedAt,
+        }
     }
-  
-]
+
+  } else return
+};
 
 export function createEventId() {
   return String(eventGuid++)

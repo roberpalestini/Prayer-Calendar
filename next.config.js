@@ -23,6 +23,8 @@ module.exports = withTM({
   },
   images: {
     disableStaticImages: true,
+      dangerouslyAllowSVG: true,
+      contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   nextConfig,
 })
