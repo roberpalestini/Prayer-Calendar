@@ -80,7 +80,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <Navbar transparent={true} style={{marginTop:'10px'}}>
+    <Navbar transparent={true}>
       <Container>
         <Navbar.Brand>
           {/* <Navbar.Item href="#">

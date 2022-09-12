@@ -120,7 +120,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       country: true,
       state: true,
       city: true,
-      // zip: true,
+      zip: true,
       addressOne: true,
       addressTwo: true,
       schedule: true,

@@ -30,8 +30,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      if (1 === 1) {
-      // if (account.providerAccountId === '17788706') {
+      if(process.env.ENVIRONMENT=="development" || account.providerAccountId === '17788706')
         return true;
       } else {
         // Return false to display a default error message
